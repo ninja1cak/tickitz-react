@@ -5,7 +5,9 @@ import Signup from './page/signup'
 import Home from './page/home'
 import Listmovie from './page/listmovie/listmovie'
 import DetailMovie from './page/detailmovie'
-import DashboardAdmin from './page/dashboardAdmin'
+import DashboardAdmin from './page/dashboardAdmin/index'
+import UpdateMovie from './page/dashboardAdmin/update'
+import Profil from './page/profilpage'
 
 function Router() {
     return(
@@ -14,9 +16,12 @@ function Router() {
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Signin />} />
                 <Route path='/signup' element={<Signup />} />
-                <Route path='/list/:id' element={<Listmovie />} />
+                <Route path='/list/' element={<Listmovie />} />
                 <Route path='/detail/:id' element={<DetailMovie />} />
-                <Route path='/admin' element={<DashboardAdmin role={ localStorage.getItem('role')}/>}/>                
+                <Route path='/admin' element={<DashboardAdmin />}/>            
+                <Route path= '/update/:idMovie' element={<UpdateMovie />} />
+                <Route path= '/profil' element={<Profil />} />
+
             </Routes>
         </BrowserRouter>
     )

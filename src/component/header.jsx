@@ -1,8 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import Logo from '../assets/img/homepage/logo.png'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import { useDispatch ,useSelector } from 'react-redux'
+import { logout } from '../store/reducer/user'
+
 
 function Header() {
+    const {isAuth, data} = useSelector((s) => s.user)
+    const role = data.role
+    // const isAuth = false
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [isActive, setIsActive] = useState(false)
     const handleClick = event =>{
         setIsActive(current => !current)
@@ -80,46 +88,75 @@ function Header() {
                     >
                         Home
                     </Link>
-                    <Link
-                        to="/list/1"
+                    {
+                        data.role == 'admin' ?
+                        <>
+                        <Link
+                            to="/admin"
+                            className=" text-gray-500 hover:text-gray-700 text-center justify-center text-sm font-medium"
+                        >
+                            Manage Movie
+                        </Link>
+                        <Link
+                            to="/list/"
+                            className=" text-gray-500 hover:text-gray-700 text-center justify-center text-sm font-medium"
+                        >
+                            Manage Schedule
+                        </Link>
+                        </>
+                        :
+                        <Link
+                        to="/list/"
                         className=" text-gray-500 hover:text-gray-700 text-center justify-center text-sm font-medium"
-                    >
-                        List Movie
-                    </Link>
+                        >
+                            List Movie
+                        </Link>
+
+                    }
+
+
+                   
                     </div>
                 </div>
                 </div>
                 <div className="hidden sm:flex absolute inset-y-0 right-0 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div className="hidden sm:block relative ml-3">
-                    <div>
-                    <form
-                        type="button"
-                        action="./profilpage.html"
-                        className="flex rounded-full bg-gray-800 text-sm hover:outline-none hover:ring-2 hover:ring-white hover:ring-offset-2 hover:ring-offset-primary hover:opacity-80 active:opacity-50"
-                        id="user-menu-button"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        onclick="myFunction('myLinks')"
-                    >
-                        <img
-                        className=" h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                        />
-                        <input
-                        className="absolute w-8 h-8 rounded-full"
-                        type="submit"
-                        value=""
-                        />
-                    </form>
-                    </div>
+                    {
+                        isAuth ? 
+                        <div>
+                        <form
+                            type="button"
+                            className="flex rounded-full bg-gray-800 text-sm hover:outline-none hover:ring-2 hover:ring-white hover:ring-offset-2 hover:ring-offset-primary hover:opacity-80 active:opacity-50"
+                            id="user-menu-button"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            onClick={() => navigate('/profil')}
+                        >
+                            <img
+                            className=" h-8 w-8 rounded-full"
+                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            alt=""
+                            />
+                            <input
+                            className="absolute w-8 h-8 rounded-full"
+                            type="submit"
+                            value=""
+                            />
+                        </form>
+                        </div>
+                        :
+                        <div>
+                            <button className='btn btn-primary' onClick={() =>  navigate('/login')}>Sign in</button>
+                        </div>
+                    }
+
                 </div>
                 </div>
             </div>
             </div>
             
             <div className="sm:hidden">
-            <div style={{display: isActive ? 'none' :'block'}}  className="hidden absolute bg-white w-full" id="mobile-menu">
+            <div style={{display: isActive ? 'block' :'none'}}  className="hidden absolute bg-white w-full" id="mobile-menu">
              
                 <div className="relative w-full bg-white z-50 ">
                 <form className="flex justify-center">
@@ -150,30 +187,47 @@ function Header() {
                     />
                     </div>
                 </form>
-                <a
-                    href="#"
+                <Link
+                    to="/"
                     className="border-y border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
                 >
                     Home{" "}
-                </a>
-                <a
-                    href="index.html"
-                    className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
-                >
+                </Link>
+                {
+                    role === 'admin' ? 
+                    <div>
+                    <Link
+                        to="/admin/"
+                        className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
+                    >
+                        Manage Movie
+                    </Link>
+                    <Link
+                        to="/list/"
+                        className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
+                    >
+                        Manage Schedule
+                    </Link>
+                    </div>
+                    :
+                    <Link
+                    to="/list/"
+                    className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg">
                     List Movie
-                </a>
-                <a
-                    href="profilpage.html"
-                    className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
-                >
+                    </Link>
+                }
+                <Link
+                    to="/profil/"
+                    className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg">
                     Profile
-                </a>
-                <a
-                    href="#"
+                </Link>
+                <Link
+                    to="/login"
+                    onClick={() => dispatch(logout())}
                     className="border-b border-gray-300 text-gray-500 hover:text-gray-700 py-4 text-center font-medium block text-lg"
                 >
                     Log Out
-                </a>
+                </Link>
                 <p className=" text-gray-500 text-md text-center items-center  pt-6 pb-2 block space-x tracking-wide">
                     © 2020 Tickitz. All Rights Reserved.
                 </p>

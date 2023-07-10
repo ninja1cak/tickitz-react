@@ -2,36 +2,44 @@ import React, {useEffect, useState} from "react";
 import HeaderSign from "../../component/headerSign"
 import {Link, useNavigate} from 'react-router-dom'
 
-import axios from 'axios'
-import { setAuthToken } from "../../utils/auth";
+
+import useApi from "../../helper/useApi";
+import { login, addData } from "../../store/reducer/user"
+import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 
 function Signin(){
     const [username, setUsername] = useState()
     const [password_user, setPassword] = useState()
     const [error, setError] = useState()
-
+    const api = useApi()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
-   
-    const login = async (e) =>{
+    const {isAuth} = useSelector((s) => s.user)
+
+    const goLogin = async (e) =>{
         try {
             e.preventDefault()
-            const dataLogin = await axios.post(`${process.env.REACT_APP_API_URL}/auth/`,{username, password_user})
-            const dataToken = jwtDecode(dataLogin.data.token)
-            console.log(dataLogin.data.token)
-            console.log(dataToken)
-            if(dataLogin.data.status == 400){
-                navigate('/login')
-                setError('invalid username or password')
-            }else{
-                localStorage.setItem("token", dataLogin.data.token);
-                localStorage.setItem('role', dataToken.role )
-                
-                setAuthToken(dataLogin.data.token)
+            const {data} = await api({
+                method: 'POST',
+                data: {username, password_user},
+                url:'/auth/'
+            })
+            console.log(data)
+
+
+            if(data.status == 200){
+                const token = data.token
+                const decode = jwtDecode(token)
+                console.log(decode)
+                dispatch(login(token))
+                dispatch(addData({role: decode.role}))
                 navigate('/')
-                setError('')
+            }else{
+                setError('Invalid username or passowrd')
             }
-            return dataLogin.data.status
+            console.log(data)
+
 
         } catch (error) {
             console.log(error)
@@ -40,8 +48,11 @@ function Signin(){
 
     
     useEffect((e) =>{
-        login()
-    },[])
+        if(isAuth){
+            navigate('/')
+        }
+
+    },[isAuth])
 
 
     return(
@@ -56,7 +67,7 @@ function Signin(){
                     <p className="text-gray-500 w-full max-w-sm tracking-wider">
                     Sign in with your data that you entered during your registration
                     </p>
-                    <form className="mt-4 w-[100%] max-w-md" method="post" onSubmit={login}>
+                    <form className="mt-4 w-[100%] max-w-md" method="post" onSubmit={goLogin}>
                     <p>
                         <label className="block mb-2">Email</label>
                         <input

@@ -6,24 +6,21 @@ import Footer from '../../component/footer'
 import Cards from '../../component/cards'
 
 import Hero from '../../assets/hero.png'
-import card1 from '../../assets/card1.png'
-import card2 from '../../assets/card2.png'
-import card3 from '../../assets/card3.png'
-import axios from 'axios'
 import {Link, useNavigate} from 'react-router-dom'
-import { setAuthToken } from '../../utils/auth'
+import useApi from '../../helper/useApi'
 
 function Home() {
     const navigate = useNavigate()
-
+    const api = useApi()
     const [movies, setMovies] = useState([])
-
-    setAuthToken(localStorage.getItem('token'))
 
     const getMovies = async () => {
         try {
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/movie/show?page=1&limit=5`)
+            const {data} = await api({
+                url: '/movie/show?page=1&limit=5'
+            })
 
+            console.log(data)
 
             let genreMovie =[]
             let dataMovies = data.data.map((v) =>{
@@ -66,32 +63,23 @@ function Home() {
                         <img className="lg:h-auto md:h-96 h-80 md:w-auto" src={Hero} alt="logo" />
                     </div>
                 </div>
-                <section className="bg-graysmoth">
+                <section className="bg-gray-100">
                     <div className="mx-auto flex flex-col max-w-7xl items-center justify-between p-5 py-10">
                         <div className="flex justify-between w-full mb-10">
                             <p className="md:text-2xl xs:text-1xl font-medium text-primary">
                                 <span className="bg-gradient-to-r from-primary via-primary to-primary bg-[length:50%_3px] bg-no-repeat bg-bottom pb-2">Now Showing</span>
                             </p>
-                            <Link to="/list/1" className="font-medium text-primary">
+                            <Link to="/list/" className="font-medium text-primary">
                                 View all
                             </Link>
                         </div>
-                        <div className="flex lg:flex-nowrap flex-wrap justify-between w-full">
-                            <a href="/#" className="cards p-8 border-2 border-white h-60 lg:h-auto hover:border-primary">
-                                <img className="max-h-full" src={card1} alt="cards" />
-                            </a>
-                            <a href="/#" className="cards p-8 border-2 border-white h-60 lg:h-auto hover:border-primary">
-                                <img className="max-h-full" src={card2} alt="cards" />
-                            </a>
-                            <a href="/#" className="cards p-8 border-2 border-white h-60 lg:h-auto hover:border-primary">
-                                <img className="max-h-full" src={card3} alt="cards" />
-                            </a>
-                            <a href="/#" className="cards p-8 border-2 border-white h-60 lg:h-auto hover:border-primary">
-                                <img className="max-h-full" src={card1} alt="cards" />
-                            </a>
-                            <a href="/#" className="cards p-8 border-2 border-white h-60 lg:h-auto hover:border-primary">
-                                <img className="max-h-full" src={card2} alt="cards" />
-                            </a>
+                        <div className='flex gap-x-4 justify-between flex-wrap'>
+                            {
+                                movies.map((v)=>{
+                                    return <Cards name={v.title_movie} genre={v.genre} image={v.url_image_movie} id_movie={v.id_movie} onPage={'detail'} hover={true}/>
+                                    
+                                })
+                            }
                         </div>
                     </div>
                 </section>
@@ -101,7 +89,7 @@ function Home() {
                             <p className='md:text-2xl xs:text-1xl font-medium'>
                                 Upcoming Movies
                             </p>
-                            <Link to="/list/1" className="font-medium text-primary">
+                            <Link to="/list" className="font-medium text-primary">
                                 View all
                             </Link>
                         </div>
@@ -122,7 +110,7 @@ function Home() {
                         <div className='flex gap-x-4 justify-between flex-wrap'>
                             {
                                 movies.map((v)=>{
-                                    return <Cards name={v.title_movie} genre={v.genre} image={v.url_image_movie} id_movie={v.id_movie} />
+                                    return <Cards name={v.title_movie} genre={v.genre} image={v.url_image_movie} id_movie={v.id_movie} onPage={'detail'} />
                                     
                                 })
                             }

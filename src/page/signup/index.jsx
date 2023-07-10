@@ -1,19 +1,28 @@
 import React, {useEffect, useState} from 'react'
 import HeaderSign from '../../component/headerSign'
 import {Link} from 'react-router-dom'
-import axios from 'axios'
-
+import { useSelector } from "react-redux";
+import useApi from '../../helper/useApi'
+import { useNavigate } from 'react-router-dom';
 function Signup() {
     const [email_user, setEmail] = useState()
     const [password_user, setPassword] = useState()
     const [first_name, setFirstName] = useState()
     const [last_name, setLastName] = useState()
     const [info, setInfo] = useState()
+    const api = useApi()
+    const {isAuth} = useSelector((s) => s.user)
+    const navigate = useNavigate()
 
     const createNewAccount = async (e) =>{
         try {
             e.preventDefault()
-            const data = await axios.post(`${process.env.REACT_APP_API_URL}/user/`, {email_user, password_user, first_name, last_name})
+            const data = await api({
+                method: 'POST',
+                url: '/user/',
+                data: {email_user, password_user, first_name, last_name}
+            })
+            
             setInfo('Activated your account from email')
             console.log(data)
         } catch (error) {
@@ -22,8 +31,10 @@ function Signup() {
     }
 
     useEffect((e)=>{
-        createNewAccount()
-    },[])
+        if(isAuth){
+            navigate('/')
+        }
+    },[isAuth])
     
 
 

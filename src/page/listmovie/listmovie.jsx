@@ -1,24 +1,27 @@
 import React, {useState, useEffect} from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
-import axios from 'axios'
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Cards from '../../component/cards'
-import { setAuthToken } from '../../utils/auth'
+import useApi from '../../helper/useApi'
+
+
 function Listdetail() {
   const navigate = useNavigate()
-  const params = useParams()
-  
+  const [meta, setMeta] = useState([])
   const [genres, setGenres] = useState([])
   const [movies, setMovies] = useState([])
   const [filter, setFilter] = useState('')
   const [search, setSearch] = useState('')
-  const [page, setPage] = useState('')
-  setAuthToken(localStorage.getItem('token'))
+  const [page, setPage] = useState('1')
+  const api = useApi()
 
   const getGenres = async () => {
     try {
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/genre/show`)
+        const {data} = await api({
+          url: '/genre/show'
+        })
+
         setGenres(data.data)        
         console.log(data.data)
     } catch (error) {
@@ -44,8 +47,12 @@ function Listdetail() {
 
   const getMovies = async () => {
     try {
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/movie/show?page=${params.id}&limit=8&genre=${filter}&search=${search}`)
+        
+        const {data} = await api({
+          url: `/movie/show?page=${page}&limit=4&genre=${filter}&search=${search}`
+        })
 
+        console.log(data)
 
         let genreMovie =[]
         let dataMovies = data.data.map((v) =>{
@@ -61,17 +68,17 @@ function Listdetail() {
             genreMovie=[]
             return data
         })
-        const meta ={
-          meta: {
-            ...data.meta,
-            prev: data.meta.prev || (data.meta.next - 1),
-            next: data.meta.next || (data.meta.prev + 1),
-            a: 'b'
-          }
-        }
+        // const meta ={
+        //   meta: {
+        //     ...data.meta,
+        //     prev: data.meta.prev || (data.meta.next - 1),
+        //     next: data.meta.next || (data.meta.prev + 1),
+        //   }
+        // }
         setMovies(dataMovies)
-        setPage(meta.meta)
-
+        setMeta(data.meta)
+ 
+        console.log(meta)
 
 
     } catch (error) {
@@ -80,12 +87,10 @@ function Listdetail() {
   }
   useEffect(() => {
     getMovies()
-  }, [filter, search, page, movies])
-
-  useEffect(() =>{
     getGenres()
-    getMovies()
-  }, [])
+
+    console.log('tse')
+  }, [filter, search, page])
 
   return (
     <>
@@ -127,7 +132,7 @@ function Listdetail() {
                     {
                         movies ? (
                           movies.map((v)=>{
-                            return <Cards name={v.title_movie} genre={v.genre} image={v.url_image_movie} id_movie={v.id_movie}/>
+                            return <Cards name={v.title_movie} genre={v.genre} image={v.url_image_movie} id_movie={v.id_movie} onPage={'detail'}/>
                             
                         })) : (
                           <h1>Data not found</h1>
@@ -137,11 +142,19 @@ function Listdetail() {
                  </div>
 
                 </div>
+                { isNaN(meta.prev) ? '':                
                 <div className=' flex gap-x-4 justify-center mt-5'>
-                  <button onClick={() => navigate(`/list/${page.prev}`)} className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white">Previous</button>
-                  <button onClick={() => navigate(`/list/${page.next}`)} className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white">Next</button>
-                </div>
+                  {
+                    meta.prev === null ? '' : <button onClick={() => setPage(meta.prev)} className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white">Previous</button>
 
+                  }
+                  <button className="btn btn-sm btn-outline bg-primary border border-white w-24 text-white" >{meta.prev === null? '1'  : meta.prev + 1}</button>
+                  {
+                    meta.next === null ? '' : <button onClick={() => setPage(meta.next)} className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white">Next</button>
+                  }
+                  
+                </div>
+                }
             </div>
         </main>      
         <Footer />

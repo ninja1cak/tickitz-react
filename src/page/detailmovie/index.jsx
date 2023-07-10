@@ -2,22 +2,21 @@ import React, {useState, useEffect} from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 import CardSchedule from '../../component/cardSchedule'
-import card1 from '../../assets/card1.png'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import { setAuthToken } from '../../utils/auth'
+import useApi from '../../helper/useApi'
 
 function DetailMovie() {
     const params = useParams()
     const [movies, setMovies] = useState([])
-
-    setAuthToken(localStorage.getItem('token'))
+    const api = useApi()
 
 
     const getMovies = async () =>{
         try {
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/movie/show?id_movie=${params.id}`)
-
+            const {data} = await api({
+                url: `/movie/show?id_movie=${params.id}`
+            })
             const stringDate = new Date(data.data[0].release_date_movie)
 
             const newData = {
