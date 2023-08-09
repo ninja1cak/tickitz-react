@@ -7,19 +7,22 @@ import useApi from "../../helper/useApi";
 import { login, addData } from "../../store/reducer/user"
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { useParams } from 'react-router-dom'
 
 function Signin(){
     const [username, setUsername] = useState()
     const [password_user, setPassword] = useState()
-    const [error, setError] = useState()
+    const [status, setStatus] = useState(0)
     const api = useApi()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {isAuth} = useSelector((s) => s.user)
+    const params = useParams()
 
     const goLogin = async (e) =>{
         try {
             e.preventDefault()
+            console.log(username, password_user)
             const {data} = await api({
                 method: 'POST',
                 data: {username, password_user},
@@ -35,31 +38,60 @@ function Signin(){
                 dispatch(login(token))
                 dispatch(addData({role: decode.role}))
                 navigate('/')
+                setStatus(data.status)
             }else{
-                setError('Invalid username or passowrd')
+                setStatus(404)
             }
-            console.log(data)
 
 
         } catch (error) {
-            console.log(error)
         }
     }
 
     
+    const verifyAccount = async (e) =>{
+        try {
+            const {data} = await api (`/auth/${params.verify}`)
+            setStatus(data.status)
+        } catch (error) {
+        }
+    }
+
     useEffect((e) =>{
         if(isAuth){
             navigate('/')
         }
 
-    },[isAuth])
+        if(params.verify !== undefined){
+            verifyAccount()
+        }
+
+        if(status === 404){
+            navigate('/login')
+
+        }
+    },[isAuth, status])
 
 
     return(
         <>
             <div className="flex flex-col lg:flex-row " id="container">
-            
+
                 <HeaderSign />
+                {
+                    status === 201 ? 
+                    <dialog id="my_modal_1" className="modal modal-open">
+                    <form method="dialog" className="modal-box">
+                        <h3 className="font-bold text-lg">Status</h3>
+                        <p className="py-4">Verify account success</p>
+                        <div className="modal-action">
+                        <button className="btn modal-close" onClick={(e) => {setStatus(0); navigate('/login');}} >Close</button>
+                        </div>
+                    </form>
+                    </dialog> :
+                    ''
+                }
+
                 <div className="mt-10 mx-5 lg:w-[40%] lg:m-auto">
                     <h1 className="text-3xl tracking-tight font-semibold mb-3 lg:text-5xl ">
                     Sign In
@@ -114,10 +146,14 @@ function Signin(){
                             Sign Up
                         </Link>{" "}
                         </p>
-                        <p className="text-center text-red-900 mt-5 font-semibold">{error}</p>
+                        {
+                            status === 400 ? <p className="text-center text-red-900 mt-5 font-semibold">Invalid Username or Passowrd</p> 
+                            : ''
+
+                        }
                     </p>
                     </form>
-
+                    
 
                 </div>
             </div>

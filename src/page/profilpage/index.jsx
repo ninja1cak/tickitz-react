@@ -91,8 +91,9 @@ function Profil() {
 
     const goLogout = () => {
         dispatch(logout())
-        navigate('/')
+        navigate('/login')
     }
+    
 
     useEffect(() =>{
         if(!isAuth){
@@ -253,7 +254,7 @@ function Profil() {
 
                     }
                     <div className="modal-action">
-                    <button className="btn" type='button' onClick={() => navigate(0)}>Close</button>
+                    <button className="btn" type='button' onClick={() =>  {email_user ? goLogout() : navigate(0)}}>Close</button>
                     </div>
                 </form>
                 </dialog>

@@ -49,7 +49,7 @@ function Listdetail() {
     try {
         
         const {data} = await api({
-          url: `/movie/show?page=${page}&limit=4&genre=${filter}&search=${search}`
+          url: `/movie/show?page=${page}&limit=8&genre=${filter}&search=${search}`
         })
 
         console.log(data)

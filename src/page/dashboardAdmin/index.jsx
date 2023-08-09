@@ -204,14 +204,19 @@ function DashboardAdmin() {
                             <form className="mt-4 w-[100%]  max-w-7xl flex flex-col justify-center items-center lg:block  " method='POST' onSubmit={createNewMovie} encType="multipart/form-data">
                                 <div className=' flex w-80 justify-center items-center lg:w-full gap-x-10 flex-col lg:flex-row '>
                                     <div>
-                                        <div className='border h-96'>
-                                            <img src={showImage} className=' object-cover h-96 p-10' alt=""  />
-                                        </div>                                        
-                                        <input
+                                        <div className='border h-96 w-72 relative group z-10'>
+                                            
+                                            <input
                                             type="file"
                                             id="file"  
-                                            onChange={(e) => {setUrlImageMovie(e.target.files[0]); setShowImage(URL.createObjectURL(e.target.files[0]))}}
-                                        />
+                                            onChange={(e) => {setUrlImageMovie(e.target.files[0]); e.target.files[0] ? setShowImage(URL.createObjectURL(e.target.files[0])) : setShowImage()}}
+                                            className='mt-5 ml-5 absolute h-80 w-64 cursor-pointer opacity-0'
+                                            />
+                                            <img src={showImage} className=' object-cover h-96 p-10' alt=""  />
+                                            <p className=' -z-10 absolute top-44 left-24 text-center border border-primary bg-primary text-white p-2 rounded-lg font-semibold group-hover:block hidden'>Choose File</p>
+
+                                        </div>                                        
+
                                     </div>
                                     <div className='flex flex-col w-full h-96 lg:flex-wrap gap-x-10 '>
                                     <div className='max-w-xs'>

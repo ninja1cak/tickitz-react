@@ -15,6 +15,7 @@ function Router() {
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Signin />} />
+                <Route path='/login/:verify' element={<Signin />} />
                 <Route path='/signup' element={<Signup />} />
                 <Route path='/list/' element={<Listmovie />} />
                 <Route path='/detail/:id' element={<DetailMovie />} />
