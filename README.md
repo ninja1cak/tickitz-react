@@ -1,70 +1,84 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tickitz 
 
-## Available Scripts
+Frontend for Tickitz
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Tickits is a web-based application for ticket booking movies and cinemas.
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Client:** React, Redux, TailwindCSS, DaisyUI
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Authentication & Authorization
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Booking & Payment Ticket
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Edit Profile
 
-### `npm run eject`
+- Edit Movies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- etc
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Getting Started
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Clone the repository
 
-## Learn More
+```bash
+  git clone https://github.com/ninja1cak/tickitz-react
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Enter the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+  cd tickitz-react
+```
 
-### Code Splitting
+Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+  npm install
+  or
+  yarn install
+```
 
-### Analyzing the Bundle Size
+Create .env file
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+  npm i dotenv
+  or
+  add .env file
+```
 
-### Making a Progressive Web App
+Add .env to the required file
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+  require('dotenv')
+```
 
-### Advanced Configuration
+Start the app
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+  npm start
+```
+    
+## Screenshots
 
-### Deployment
+![App Screenshot](https://github.com/ninja1cak/tickitz-react/blob/master/src/assets/readme1.PNG)
+![App Screenshot](https://github.com/ninja1cak/tickitz-react/blob/master/src/assets/readme2.PNG)
+![App Screenshot](https://github.com/ninja1cak/tickitz-react/blob/master/src/assets/readme3.PNG)
+![App Screenshot](https://github.com/ninja1cak/tickitz-react/blob/master/src/assets/readme4.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+## Related
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+[Zwallet Backend](https://github.com/ninja1cak/zwallet-be/tree/master)
+
